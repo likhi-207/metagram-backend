@@ -13,3 +13,4 @@ def login(request):
         realUserData=serializer.data
         print(realUserData)
         return Response(realUserData)
+    return Response(serializer.errors,status=400)
