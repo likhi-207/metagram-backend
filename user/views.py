@@ -13,14 +13,14 @@ SECRET_KEY = "secret-key"
 def login(request):
     try:
         # Validate input data
-        userName = request.data.get("userName")
+        username = request.data.get("username")
         password = request.data.get("password")
 
-        if not userName or not password:
+        if not username or not password:
             return Response({"msg": "Username and password are required."}, status=400)
 
         # Fetch user
-        user = User.objects.get(userName=userName)
+        user = User.objects.get(username=username)
         user_data = UserSerializer(user).data
 
         # Compare passwords (consider hashing in production)
@@ -33,7 +33,7 @@ def login(request):
         # Generate JWT
         payload = {
             "userId": user_data["id"],
-            "userName": user_data["userName"],
+            "username": user_data["username"],
             "email": user_data["email"],
             "exp": datetime.utcnow() + timedelta(hours=2),
             "iat": datetime.utcnow(),
