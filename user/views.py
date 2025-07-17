@@ -12,25 +12,20 @@ SECRET_KEY = "secret-key"
 @api_view(["POST"])
 def login(request):
     try:
-        # Validate input data
         username = request.data.get("username")
         password = request.data.get("password")
 
         if not username or not password:
             return Response({"msg": "Username and password are required."}, status=400)
 
-        # Fetch user
         user = User.objects.get(username=username)
         user_data = UserSerializer(user).data
-
-        # Compare passwords (consider hashing in production)
         if user_data["password"] != password:
             return Response({
                 "msg": "Login Failed - Incorrect credentials",
                 "login": 0
             }, status=401)
 
-        # Generate JWT
         payload = {
             "userId": user_data["id"],
             "username": user_data["username"],
